@@ -1,2 +1,74 @@
 # Torus
 creating a rotating gold metal torus with lots of light in three.js
+
+
+//you'll need to include the three.js library in your HTML file and set up the canvas element where the 3D scene will be rendered.
+
+Here's an example of how you can do this:
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rotating Gold Metal Torus</title>
+  <style>
+    body { margin: 0; }
+    canvas { width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <canvas id="myCanvas"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r122/three.min.js"></script>
+  <script>
+    // Set up the 3D scene
+    const canvas = document.getElementById('myCanvas');
+    const renderer = new THREE.WebGLRenderer({ canvas });
+    const fov = 75;
+    const aspect = 2;  // the canvas default
+    const near = 0.1;
+    const far = 5;
+    const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+    camera.position.z = 2;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('black');
+
+    // Create the gold metal torus
+    const geometry = new THREE.TorusBufferGeometry(1, 0.4, 8, 32);
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xffd700,  // gold color
+      roughness: 0.5,
+      metalness: 1,
+    });
+    const torus = new THREE.Mesh(geometry, material);
+    scene.add(torus);
+
+    // Add lots of light
+    const color = 0xFFFFFF;
+    const intensity = 1;
+    const light = new THREE.DirectionalLight(color, intensity);
+    light.position.set(-1, 2, 4);
+    scene.add(light);
+
+    const light2 = new THREE.DirectionalLight(color, intensity);
+    light2.position.set(1, -2, -4);
+    scene.add(light2);
+
+    const ambientLight = new THREE.AmbientLight(color, 0.5);
+    scene.add(ambientLight);
+
+    // Render the scene
+    function render(time) {
+      time *= 0.001;  // convert time to seconds
+
+      torus.rotation.x = time;
+      torus.rotation.y = time;
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
+  </script>
+</body>
+</html>
+
+
